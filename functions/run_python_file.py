@@ -1,5 +1,29 @@
 import os
 import subprocess
+from google.genai import types
+
+schema_run_python_file = types.FunctionDeclaration(
+    name="run_python_file",
+    description="Runs a Python file with optional arguments in a subprocess. Returns exit code, stdout and stderr",
+    parameters=types.Schema(
+        required=["file_path"],
+        type=types.Type.OBJECT,
+        properties={
+            "file_path": types.Schema(
+                type=types.Type.STRING,
+                description="File path relative to the working directory",
+            ),
+            "args": types.Schema(
+                type=types.Type.ARRAY,
+                description="Command-line arguments passed to the Python script",
+                items=types.Schema(
+                    type=types.Type.STRING,
+                    description="A single argument",
+                )
+            ),
+        },
+    ),
+)  
 
 def run_python_file(working_directory, file_path, args=None):
     try:
